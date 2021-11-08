@@ -46,9 +46,11 @@ class TicketController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Ticket $ticket)
     {
-        //
+        $ticket->load('type', 'status', 'priority');
+
+        return view('tickets.edit', compact('ticket'));
     }
 
     /**
@@ -69,9 +71,23 @@ class TicketController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        //
+    public function update(Request $request, Ticket $ticket)
+    {   
+        $validated = $request->validate([
+            'title' => 'required',
+            'description' => 'required',
+            'ticket_type_id' => 'required|exists:ticket_types,id',
+            'priority_id' => 'nullable|exists:ticket_priorities,id',
+            'status_id' => 'nullable|exists:ticket_statuses,id',
+            'owner_id' => 'nullable|exists:users,id',
+            'target_date' => 'nullable|date',
+        ]);
+        // dd($validated);
+        $validated['updated_by_id'] = $request->user()->id;
+
+        $ticket->update($validated);
+
+        return redirect()->route('tickets.show', $ticket);
     }
 
     /**
