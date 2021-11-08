@@ -38,6 +38,10 @@
             <x-ticket-type-select :selected="$ticket->ticket_type_id"/>
         </div>
         <div class="mt-4">
+            <x-label>Department</x-label>
+            <x-department-select :selected="$ticket->department_id"/>
+        </div>
+        <div class="mt-4">
             <x-label>Status</x-label>
             <x-ticket-status-select :selected="$ticket->status_id"/>
         </div>

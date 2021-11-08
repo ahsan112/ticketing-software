@@ -26,7 +26,7 @@ class TicketController extends Controller
      */
     public function create()
     {
-        //
+        return view('tickets.create');
     }
 
     /**
@@ -35,9 +35,20 @@ class TicketController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Ticket $ticket)
     {
-        //
+        $validated = $request->validate([
+            'title' => 'required',
+            'description' => 'required',
+            'ticket_type_id' => 'required|exists:ticket_types,id',
+            'department_id' => 'required|exists:departments,id',
+        ]);
+
+        $validated['updated_by_id'] = $request->user()->id;
+
+        $request->user()->tickets()->create($validated);
+
+        return redirect()->route('tickets.index');
     }
 
     /**
@@ -77,12 +88,13 @@ class TicketController extends Controller
             'title' => 'required',
             'description' => 'required',
             'ticket_type_id' => 'required|exists:ticket_types,id',
+            'department_id' => 'nullable|exists:departments,id',
             'priority_id' => 'nullable|exists:ticket_priorities,id',
             'status_id' => 'nullable|exists:ticket_statuses,id',
             'owner_id' => 'nullable|exists:users,id',
             'target_date' => 'nullable|date',
         ]);
-        // dd($validated);
+
         $validated['updated_by_id'] = $request->user()->id;
 
         $ticket->update($validated);

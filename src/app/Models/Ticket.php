@@ -10,7 +10,7 @@ class Ticket extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'description', 'ticket_type_id', 'status_id', 'priority_id', 'updated_by_id', 'target_date', 'owner_id'];
+    protected $fillable = ['title', 'description', 'ticket_type_id', 'status_id', 'priority_id', 'updated_by_id', 'target_date', 'owner_id', 'department_id'];
     
     public function status(): BelongsTo
     {
@@ -25,6 +25,11 @@ class Ticket extends Model
     public function type(): BelongsTo
     {
         return $this->belongsTo(TicketType::class);
+    }
+
+    public function department(): BelongsTo
+    {
+        return $this->belongsTo(Department::class);
     }
 
     public function createdBy(): BelongsTo

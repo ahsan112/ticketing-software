@@ -21,7 +21,7 @@
 
     <x-table.td> 
         <x-slot name="value">
-            Sales
+            {{ $ticket->department->name ?? 'Not Set' }}
         </x-slot>
     </x-table.td>
 

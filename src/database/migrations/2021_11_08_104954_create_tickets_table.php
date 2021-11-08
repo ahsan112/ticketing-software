@@ -18,6 +18,7 @@ class CreateTicketsTable extends Migration
             $table->string('title');
             $table->text('description');
             $table->foreignId('ticket_type_id')->constrained();
+            $table->foreignId('department_id')->nullable()->constrained();
             $table->foreignId('owner_id')->nullable()->references('id')->on('users');
             $table->foreignId('status_id')->nullable()->references('id')->on('ticket_statuses');
             $table->foreignId('priority_id')->nullable()->references('id')->on('ticket_priorities');
