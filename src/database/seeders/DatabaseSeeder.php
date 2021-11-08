@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Ticket;
 use App\Models\TicketPriority;
 use App\Models\TicketStatus;
 use App\Models\TicketType;
@@ -37,6 +38,16 @@ class DatabaseSeeder extends Seeder
             ['name' => 'high'],
             ['name' => 'normal'],
             ['name' => 'low'],
+        ]);
+
+        Ticket::factory(3)->create();
+        Ticket::factory(3)->create([
+            'created_by_id' => 2,
+            'updated_by_id' => 2,
+        ]);
+        Ticket::factory(3)->create([
+            'created_by_id' => 3,
+            'updated_by_id' => 3,
         ]);
     }
 }
