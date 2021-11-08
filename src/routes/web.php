@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function () {
     Route::view('/', 'dashboard')->name('dashboard');
+
+    Route::resource('tickets', TicketController::class);
 });
 
 require __DIR__.'/auth.php';
