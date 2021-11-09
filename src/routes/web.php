@@ -23,6 +23,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('tickets/{ticket}/tasks/create', [TicketTaskController::class, 'create'])->name('ticket.tasks.create');
     Route::post('tickets/{ticket}/tasks', [TicketTaskController::class, 'store'])->name('ticket.tasks.store');
+    Route::get('ticket/tasks/{task}', [TicketTaskController::class, 'edit'])->name('ticket.tasks.edit');
+    Route::put('ticket/tasks/{task}', [TicketTaskController::class, 'update'])->name('ticket.tasks.update');
 
     Route::post('tickets/{ticket}/documents', [TicketDocumentController::class, 'create'])->name('ticket.documents');
     Route::get('ticket/documents/{document}/download', [TicketDocumentController::class, 'download'])->name('ticket.document.download');

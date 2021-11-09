@@ -31,7 +31,7 @@
     </x-table.td>
     <x-table.td> 
         <x-slot name="value">
-            <a href="#" class="text-gray-900">view</a>
+            <a href="{{ route('ticket.tasks.edit', $task) }}" class="text-gray-900">view</a>
         </x-slot>
     </x-table.td>
 </tr>
