@@ -77,5 +77,34 @@
                 </div>
             </div>
         </form>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 sm:gap-6 sm:mt-6 mt-12">
+            <div class="col-span-1 sm:col-span-2">
+                <x-panel>
+                    <h3 class="text-lg font-medium leading-6 text-gray-900">Comments</h3>
+                    <hr class="my-4">
+                    <div class="mb-8 space-y-6">
+                        @foreach ($ticket->comments as $comment)
+                            <x-comment :comment="$comment"/>
+                        @endforeach
+                    </div>
+
+                    <div class="-mb-6 -mx-6 bg-gray-50 text-right">
+                        <div class="px-6 py-6">
+                            <form method="POST" action="{{ route('ticket.comments', $ticket) }}">
+                                @csrf
+                                @error('body')
+                                    <span class="text-xs text-red-500">{{ $message }}</span>
+                                @enderror
+                                <textarea id="comment" name="body" rows="5" class="inline-flex  shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-2 w-full sm:text-sm border border-gray-300 rounded-md" placeholder="Add your comment here" required></textarea>
+                                <x-button class="mt-2">Comment</x-button>
+                            </form>
+                        </div>
+                    </div>
+                </x-panel>
+            </div>
+            <div class="mt-4 sm:mt-0 col-span-1">
+            </div>
+        </div>
     </x-container>
 </x-app-layout>
