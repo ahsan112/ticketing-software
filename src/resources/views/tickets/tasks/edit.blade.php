@@ -59,6 +59,14 @@
             </div>
         </form>
 
+        <div class="grid grid-cols-1 sm:grid-cols-3 sm:gap-6 sm:mt-6 mt-12">
+            <div class="col-span-1 sm:col-span-2">
+                <form method="POST" action="{{ route('ticket.task.comments', $task) }}">
+                    @csrf
+                    <x-comments-panel :comments="$task->comments"/>
+                </form>
+            </div>
+        </div>
         
     </x-container>
 </x-app-layout>

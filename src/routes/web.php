@@ -4,6 +4,7 @@ use App\Http\Controllers\TicketAcceptOrRejectController;
 use App\Http\Controllers\TicketCommentController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\TicketDocumentController;
+use App\Http\Controllers\TicketTaskCommentController;
 use App\Http\Controllers\TicketTaskController;
 use Illuminate\Support\Facades\Route;
 
@@ -25,6 +26,7 @@ Route::middleware('auth')->group(function () {
     Route::post('tickets/{ticket}/tasks', [TicketTaskController::class, 'store'])->name('ticket.tasks.store');
     Route::get('ticket/tasks/{task}', [TicketTaskController::class, 'edit'])->name('ticket.tasks.edit');
     Route::put('ticket/tasks/{task}', [TicketTaskController::class, 'update'])->name('ticket.tasks.update');
+    Route::post('ticket/tasks/{task}/comments', [TicketTaskCommentController::class, 'create'])->name('ticket.task.comments');
 
     Route::post('tickets/{ticket}/documents', [TicketDocumentController::class, 'create'])->name('ticket.documents');
     Route::get('ticket/documents/{document}/download', [TicketDocumentController::class, 'download'])->name('ticket.document.download');
