@@ -1,6 +1,23 @@
 <x-app-layout>
     <x-container>
 
+        <div class="grid grid-cols-3 gap-6 mb-16">
+            <div class="col-span-2">
+                <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4" role="alert">
+                    <p class="font-bold">Task needs completing </p>
+                    <p>Please complete this task as soon as possible. <br> The deadline is {{ $task->target_date->diffForHumans() }}</p>
+                </div>
+            </div>
+            <div class="col-span-1">
+                <div class="flex flex-col justify-center h-full">
+                    <form method="POST" action="{{ Route('ticket.tasks.complete', $task) }}">
+                        @csrf
+                        <x-button class="w-full justify-center">complete</x-button>
+                    </form>
+                </div>
+            </div>
+        </div>    
+
         <form method="POST" action="{{ route('ticket.tasks.update', $task) }}">
             @csrf
             @method('PUT')

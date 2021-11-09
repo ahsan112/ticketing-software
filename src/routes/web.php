@@ -27,6 +27,7 @@ Route::middleware('auth')->group(function () {
     Route::get('ticket/tasks/{task}', [TicketTaskController::class, 'edit'])->name('ticket.tasks.edit');
     Route::put('ticket/tasks/{task}', [TicketTaskController::class, 'update'])->name('ticket.tasks.update');
     Route::post('ticket/tasks/{task}/comments', [TicketTaskCommentController::class, 'create'])->name('ticket.task.comments');
+    Route::post('tickets/tasks/{task}/complete', [TicketTaskController::class, 'complete'])->name('ticket.tasks.complete');
 
     Route::post('tickets/{ticket}/documents', [TicketDocumentController::class, 'create'])->name('ticket.documents');
     Route::get('ticket/documents/{document}/download', [TicketDocumentController::class, 'download'])->name('ticket.document.download');

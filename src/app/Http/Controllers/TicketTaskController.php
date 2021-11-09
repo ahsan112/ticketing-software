@@ -49,4 +49,11 @@ class TicketTaskController extends Controller
 
         return redirect()->route('ticket.tasks.edit', $task);
     }
+
+    public function complete(TicketTask $task)
+    {
+        $task->complete();
+
+        return redirect()->route('tickets.show', $task->ticket_id);
+    }
 }

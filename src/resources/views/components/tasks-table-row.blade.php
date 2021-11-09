@@ -15,7 +15,7 @@
         <x-slot name="value">
             @if ($task->completed())
                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded bg-green-100 text-green-800">
-                    completed  - {{ $task->completed_at }}
+                    completed  - {{ $task->completed_at->diffForHumans() }}
                 </span>
             @else
                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded bg-red-100 text-red-900">
