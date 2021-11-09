@@ -104,6 +104,14 @@
                 </x-panel>
             </div>
             <div class="mt-4 sm:mt-0 col-span-1">
+                <x-panel>
+                    <form method="POST" action="{{ route('ticket.documents', $ticket) }}" enctype="multipart/form-data">
+                        @csrf
+                        <x-ticket-document-upload/>
+                    </form>
+                    
+                    <x-ticket-documents :documents="$ticket->documents"/>  
+                </x-panel>
             </div>
         </div>
     </x-container>
