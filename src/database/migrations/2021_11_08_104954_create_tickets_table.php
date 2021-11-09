@@ -22,7 +22,7 @@ class CreateTicketsTable extends Migration
             $table->foreignId('owner_id')->nullable()->references('id')->on('users');
             $table->foreignId('status_id')->nullable()->references('id')->on('ticket_statuses');
             $table->foreignId('priority_id')->nullable()->references('id')->on('ticket_priorities');
-            $table->boolean('accpeted')->nullable();
+            $table->boolean('accepted')->nullable();
             $table->date('target_date')->nullable();
             $table->boolean('completed')->nullable();
             $table->date('completed_at')->nullable();

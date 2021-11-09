@@ -15,7 +15,7 @@ class TicketController extends Controller
     public function index()
     {
         return view('tickets.index', [
-            'tickets' => Ticket::with('status', 'priority')->get()
+            'tickets' => Ticket::withOutRejected()->with('status', 'priority', 'department')->get()
         ]);
     }
 
@@ -59,7 +59,7 @@ class TicketController extends Controller
      */
     public function show(Ticket $ticket)
     {
-        $ticket->load('type', 'status', 'priority');
+        $ticket->load('type', 'status', 'priority', 'department');
 
         return view('tickets.edit', compact('ticket'));
     }

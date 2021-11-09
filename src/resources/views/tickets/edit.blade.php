@@ -1,5 +1,36 @@
 <x-app-layout> 
     <x-container>
+        @if ($ticket->rejected())
+            <div class="mb-8">
+                <x-alert-danger>
+                    <x-slot name="title">Rejected!</x-slot>
+                    this ticket has been rejected.
+                </x-alert-danger>
+            </div>
+            
+        @endif
+        @if (is_null($ticket->accepted))
+            <div class="grid grid-cols-3 gap-6 mb-16">
+                <div class="col-span-2">
+                    <x-alert-warning>
+                        <x-slot name="title">Pending</x-slot>
+                        this ticket is waiting to be accepted.
+                    </x-alert-warning>
+                </div>
+                <div class="col-span-1">
+                    <div class="flex flex-col space-y-2">
+                        <form method="POST" action="{{ route('ticket.reject', $ticket) }}">
+                            @csrf
+                            <x-button class=" w-full bg-red-900 justify-center">reject</x-button>
+                        </form>
+                        <form method="POST" action="{{ route('ticket.accept', $ticket) }}">
+                            @csrf
+                            <x-button class="w-full justify-center">accept</x-button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        @endif 
 
         <form method="POST" action="{{ route('tickets.update', $ticket) }}">
             @csrf
