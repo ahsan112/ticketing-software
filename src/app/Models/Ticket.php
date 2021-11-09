@@ -51,6 +51,11 @@ class Ticket extends Model
         return $this->hasMany(TicketDocument::class);
     }
 
+    public function tasks(): HasMany
+    {
+        return $this->hasMany(TicketTask::class);
+    }
+
     public function createdBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by_id');

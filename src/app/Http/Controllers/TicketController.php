@@ -59,7 +59,7 @@ class TicketController extends Controller
      */
     public function show(Ticket $ticket)
     {
-        $ticket->load('type', 'status', 'priority', 'department', 'comments', 'documents');
+        $ticket->load('type', 'status', 'priority', 'department', 'comments', 'documents', 'tasks');
 
         return view('tickets.edit', compact('ticket'));
     }

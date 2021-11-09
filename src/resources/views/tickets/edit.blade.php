@@ -114,5 +114,30 @@
                 </x-panel>
             </div>
         </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 sm:gap-6 sm:mt-24 mt-12">
+            <div class="col-span-1 sm:col-span-2">
+                <div class="flex justify-between  items-center">
+                    <div class="flex">
+                        <div class="flex flex-col">
+                            <x-heading>Sub Tasks</x-heading>
+                            <p class="ml6 mt-1 text-sm text-gray-400">add some sub tasks </p>
+                        </div>
+                    </div>
+                    <div>
+                        <a href="{{ route('ticket.tasks.create', $ticket) }}" class="px-10 inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">Add</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-span-1 sm:col-span-2">
+                <div class="mt-8 sm:mt-0 sm:p-6">
+                   <x-tasks-table :tasks="$ticket->tasks"/>     
+                </div>
+                        
+            </div>
+
+            <div class="col-span-1">
+            </div>
+        </div>
     </x-container>
 </x-app-layout>
