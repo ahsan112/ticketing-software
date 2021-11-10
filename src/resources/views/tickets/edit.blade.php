@@ -1,38 +1,69 @@
 <x-app-layout> 
     <x-container>
-        @if ($ticket->rejected())
-            <div class="mb-8">
-                <x-alert-danger>
-                    <x-slot name="title">Rejected!</x-slot>
-                    this ticket has been rejected.
-                </x-alert-danger>
-            </div>
-            
-        @endif
-        @if (is_null($ticket->accepted))
-            <div class="grid grid-cols-3 gap-6 mb-16">
-                <div class="col-span-2">
-                    <x-alert-warning>
-                        <x-slot name="title">Pending</x-slot>
-                        this ticket is waiting to be accepted.
-                    </x-alert-warning>
+
+        @if ($ticket->completed())
+            <x-alert-success>
+                <x-slot name="title">Completed!</x-slot>
+                This ticket has been completed
+            </x-alert-success>
+        @else
+            @if ($ticket->rejected())
+                <div class="mb-8">
+                    <x-alert-danger>
+                        <x-slot name="title">Rejected!</x-slot>
+                        this ticket has been rejected.
+                    </x-alert-danger>
                 </div>
-                <div class="col-span-1">
-                    @can('manage-ticket')
-                        <div class="flex flex-col space-y-2">
-                            <form method="POST" action="{{ route('ticket.reject', $ticket) }}">
-                                @csrf
-                                <x-button class=" w-full bg-red-900 justify-center">reject</x-button>
-                            </form>
-                            <form method="POST" action="{{ route('ticket.accept', $ticket) }}">
-                                @csrf
-                                <x-button class="w-full justify-center">accept</x-button>
-                            </form>
+                
+            @endif
+
+            @if (is_null($ticket->accepted))
+                <div class="grid grid-cols-3 gap-6 mb-16">
+                    <div class="col-span-2">
+                        <x-alert-warning>
+                            <x-slot name="title">Pending</x-slot>
+                            this ticket is waiting to be accepted.
+                        </x-alert-warning>
+                    </div>
+                    <div class="col-span-1">
+                        @can('manage-ticket')
+                            <div class="flex flex-col space-y-2">
+                                <form method="POST" action="{{ route('ticket.reject', $ticket) }}">
+                                    @csrf
+                                    <x-button class=" w-full bg-red-900 justify-center">reject</x-button>
+                                </form>
+                                <form method="POST" action="{{ route('ticket.accept', $ticket) }}">
+                                    @csrf
+                                    <x-button class="w-full justify-center">accept</x-button>
+                                </form>
+                            </div>
+                        @endcan
+                    </div>
+                </div>
+            @endif 
+
+            @if ($ticket->approved())
+                <div class="grid grid-cols-3 gap-6 mb-16">
+                    <div class="col-span-2">
+                        <x-alert-warning>
+                            <x-slot name="title">Ready for completion</x-slot>
+                            this ticket is ready to be completed.
+                        </x-alert-warning>
+                    </div>
+                    <div class="col-span-1">
+                        <div class="flex flex-col justify-center h-full">
+                            @can('manage-ticket')                            
+                                <form method="POST" action="{{ Route('ticket.complete', $ticket) }}">
+                                    @csrf
+                                    <x-button class="w-full justify-center">complete</x-button>
+                                </form>
+                            @endcan
                         </div>
-                    @endcan
-                </div>
-            </div>
-        @endif 
+                    </div>
+                </div>    
+            @endif
+        @endif
+       
 
         <form method="POST" action="{{ route('tickets.update', $ticket) }}">
             @csrf
@@ -45,9 +76,12 @@
                     {{ 'Created on ' . $ticket->created_at->toFormattedDateString() }}
                 </x-slot>
 
-                @can('update', $ticket)
-                    <x-button class="sm:mt-0 sm:w-auto px-10 w-full justify-center mt-4">update</x-button> 
-                @endcan
+                @unless ($ticket->completed())                        
+                    @can('update', $ticket)
+                        <x-button class="sm:mt-0 sm:w-auto px-10 w-full justify-center mt-4">update</x-button> 
+                    @endcan
+                @endunless
+
             </x-header-section>
 
             <div class="grid sm:grid-cols-3 sm:gap-6 sm:mt-6 mt-12">
@@ -102,24 +136,28 @@
 
                         <div class="-mb-6 -mx-6 bg-gray-50 text-right">
                             <div class="px-6 py-6">
-                                <form method="POST" action="{{ route('ticket.comments', $ticket) }}">
-                                    @csrf
-                                    @error('body')
-                                        <span class="text-xs text-red-500">{{ $message }}</span>
-                                    @enderror
-                                    <textarea id="comment" name="body" rows="5" class="inline-flex  shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-2 w-full sm:text-sm border border-gray-300 rounded-md" placeholder="Add your comment here" required></textarea>
-                                    <x-button class="mt-2">Comment</x-button>
-                                </form>
+                                @unless ($ticket->completed())                                    
+                                    <form method="POST" action="{{ route('ticket.comments', $ticket) }}">
+                                        @csrf
+                                        @error('body')
+                                            <span class="text-xs text-red-500">{{ $message }}</span>
+                                        @enderror
+                                        <textarea id="comment" name="body" rows="5" class="inline-flex  shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-2 w-full sm:text-sm border border-gray-300 rounded-md" placeholder="Add your comment here" required></textarea>
+                                        <x-button class="mt-2">Comment</x-button>
+                                    </form>
+                                @endunless
                             </div>
                         </div>
                     </x-panel>
                 </div>
                 <div class="mt-4 sm:mt-0 col-span-1">
                     <x-panel>
-                        <form method="POST" action="{{ route('ticket.documents', $ticket) }}" enctype="multipart/form-data">
-                            @csrf
-                            <x-ticket-document-upload/>
-                        </form>
+                        @unless ($ticket->completed())                                    
+                            <form method="POST" action="{{ route('ticket.documents', $ticket) }}" enctype="multipart/form-data">
+                                @csrf
+                                <x-ticket-document-upload/>
+                            </form>
+                        @endunless
                         
                         <x-ticket-documents :documents="$ticket->documents"/>  
                     </x-panel>
@@ -137,7 +175,9 @@
                         </div>
                         <div>
                             @can('manage-task')
-                                <a href="{{ route('ticket.tasks.create', $ticket) }}" class="px-10 inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">Add</a>
+                                @unless ($ticket->completed())                                    
+                                    <a href="{{ route('ticket.tasks.create', $ticket) }}" class="px-10 inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">Add</a>
+                                @endunless
                             @endcan
                         </div>
                     </div>
@@ -164,11 +204,12 @@
                     </div>
                 </div>
                 <div class="col-span-1 sm:col-span-2">
-                    <form method="POST" action="{{ route('ticket.approvals', $ticket) }}">
-                        @csrf
-                        <x-add-ticket-approver />
-                    </form>   
-                    
+                    @unless ($ticket->completed())                                    
+                        <form method="POST" action="{{ route('ticket.approvals', $ticket) }}">
+                            @csrf
+                            <x-add-ticket-approver />
+                        </form>   
+                    @endunless
                 </div>
                 <div class="col-span-1 sm:col-span-2">
                     <div class="mt-8 sm:mt-0 sm:p-6">

@@ -15,7 +15,7 @@ class TicketController extends Controller
     public function index()
     {
         return view('tickets.index', [
-            'tickets' => Ticket::withOutRejected()->with('status', 'priority', 'department')->get()
+            'tickets' => Ticket::withOutRejected()->withoutCompleted()->with('status', 'priority', 'department')->get()
         ]);
     }
 

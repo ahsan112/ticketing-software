@@ -3,6 +3,7 @@
 use App\Http\Controllers\TicketAcceptOrRejectController;
 use App\Http\Controllers\TicketApprovalController;
 use App\Http\Controllers\TicketCommentController;
+use App\Http\Controllers\TicketCompleteController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\TicketDocumentController;
 use App\Http\Controllers\TicketTaskCommentController;
@@ -22,6 +23,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function () {
     Route::view('/', 'dashboard')->name('dashboard');
+
+    Route::post('tickets/{ticket}/complete', TicketCompleteController::class)->name('ticket.complete');
 
     Route::post('tickets/{ticket}/approvers', [TicketApprovalController::class, 'create'])->name('ticket.approvals');
     Route::post('ticket/approvers/{approver}/approve', [TicketApprovalController::class, 'approve'])->name('ticket.approver.approve');

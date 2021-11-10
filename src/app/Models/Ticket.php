@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,7 +14,20 @@ class Ticket extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'description', 'ticket_type_id', 'status_id', 'priority_id', 'updated_by_id', 'target_date', 'owner_id', 'department_id', 'accepted'];
+    protected $fillable = [
+        'title', 
+        'description', 
+        'ticket_type_id', 
+        'status_id', 
+        'priority_id', 
+        'updated_by_id', 
+        'target_date', 
+        'owner_id', 
+        'department_id', 
+        'accepted', 
+        'completed', 
+        'completed_at'
+    ];
     
     protected $casts = [
         'target_date' => 'date'
@@ -23,6 +37,11 @@ class Ticket extends Model
     {
         return $query->where('accepted', true)
                     ->orWhere('accepted', NULL);
+    }
+    
+    public function scopeWithOutCompleted(Builder $query): Builder
+    {
+        return $query->where('completed', NULL);
     }
 
     public function status(): BelongsTo
@@ -83,5 +102,31 @@ class Ticket extends Model
     public function rejected(): bool
     {
         return $this->accepted === 0;
+    }
+
+    public function approved(): bool
+    {
+        if ($this->approvers->isEmpty()) {
+            return false;
+        }
+
+        if ($this->approvers()->whereNull('approved')->count() != 0) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function complete()
+    {
+        $this->update([
+            'completed' => true,
+            'completed_at' => Carbon::now()
+        ]);
+    }
+
+    public function completed(): bool
+    {
+        return $this->completed == true;
     }
 }
