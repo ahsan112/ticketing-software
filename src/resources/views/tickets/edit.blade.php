@@ -151,6 +151,35 @@
                 <div class="col-span-1">
                 </div>
             </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 sm:gap-6 sm:mt-16 mt-12">
+                <div class="col-span-1 sm:col-span-2">
+                    <div class="flex justify-between  items-center">
+                        <div class="flex">
+                            <div class="flex flex-col">
+                                <x-heading>Approve Ticket</x-heading>
+                                <p class="ml6 mt-1 text-sm text-gray-400">add some approvers </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-span-1 sm:col-span-2">
+                    <form method="POST" action="{{ route('ticket.approvals', $ticket) }}">
+                        @csrf
+                        <x-add-ticket-approver />
+                    </form>   
+                    
+                </div>
+                <div class="col-span-1 sm:col-span-2">
+                    <div class="mt-8 sm:mt-0 sm:p-6">
+                        <x-ticket-approvers :approvers="$ticket->approvers"/>   
+                    </div>
+                            
+                </div>
+           
+                <div class="col-span-1">
+                </div>
+            </div>
         @endunless
 
     </x-container>

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\TicketAcceptOrRejectController;
+use App\Http\Controllers\TicketApprovalController;
 use App\Http\Controllers\TicketCommentController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\TicketDocumentController;
@@ -21,6 +22,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function () {
     Route::view('/', 'dashboard')->name('dashboard');
+
+    Route::post('tickets/{ticket}/approvers', [TicketApprovalController::class, 'create'])->name('ticket.approvals');
+    Route::post('ticket/approvers/{approver}/approve', [TicketApprovalController::class, 'approve'])->name('ticket.approver.approve');
 
     Route::get('tickets/{ticket}/tasks/create', [TicketTaskController::class, 'create'])->name('ticket.tasks.create');
     Route::post('tickets/{ticket}/tasks', [TicketTaskController::class, 'store'])->name('ticket.tasks.store');
