@@ -9,6 +9,8 @@ use App\Http\Controllers\TicketDocumentController;
 use App\Http\Controllers\TicketFilterController;
 use App\Http\Controllers\TicketTaskCommentController;
 use App\Http\Controllers\TicketTaskController;
+use App\Http\Controllers\UserTaskController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,6 +26,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function () {
     Route::view('/', 'dashboard')->name('dashboard');
+
+    Route::get('tasks', UserTaskController::class)->name('tasks.index');
 
     Route::post('tickets/filter', TicketFilterController::class)->name('tickets.filter');
 
