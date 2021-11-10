@@ -44,6 +44,36 @@ class Ticket extends Model
         return $query->where('completed', NULL);
     }
 
+    public function scopeWithCompleted(Builder $query): Builder 
+    {
+        return $query->where('completed', true);
+    }
+
+    public function scopeWithRejected(Builder $query): Builder 
+    {
+        return $query->where('accepted', 0);
+    }
+
+    public function scopeFilter(Builder $query, array $filters)
+    {
+        $query->when($filters['view'] == 'open', fn($query) => 
+            $query->withOutRejected()->withoutCompleted()
+        );
+
+        $query->when($filters['view'] == 'completed', fn($query) => 
+            $query->withCompleted()
+        );
+
+        $query->when($filters['view'] == 'rejected', fn($query) => 
+            $query->withRejected()
+        );
+
+        $query->when($filters['owner_id'] ?? false, fn($query, $user) => 
+            $query->where('created_by_id', $user)
+        );
+
+    }
+
     public function status(): BelongsTo
     {
         return $this->belongsTo(TicketStatus::class);

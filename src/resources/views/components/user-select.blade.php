@@ -3,5 +3,4 @@
     name="owner_id" 
     :items="$users" 
     :selected="$selected" 
-    required 
 />

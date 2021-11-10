@@ -6,6 +6,7 @@ use App\Http\Controllers\TicketCommentController;
 use App\Http\Controllers\TicketCompleteController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\TicketDocumentController;
+use App\Http\Controllers\TicketFilterController;
 use App\Http\Controllers\TicketTaskCommentController;
 use App\Http\Controllers\TicketTaskController;
 use Illuminate\Support\Facades\Route;
@@ -23,6 +24,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function () {
     Route::view('/', 'dashboard')->name('dashboard');
+
+    Route::post('tickets/filter', TicketFilterController::class)->name('tickets.filter');
 
     Route::post('tickets/{ticket}/complete', TicketCompleteController::class)->name('ticket.complete');
 

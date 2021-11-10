@@ -4,7 +4,10 @@
             <div class="sm:flex">
                 <x-heading class="sm:mr-4">Tickets</x-heading>
             </div>
-            <x-search :route="'test'" />
+            <x-filters :view="$view" :user="$user"/>
+            <div>
+                <x-search :route="'test'" />
+            </div>
         </x-header>
 
         <div class="sm:hidden px-6 space-y-4 mt-4"> 
