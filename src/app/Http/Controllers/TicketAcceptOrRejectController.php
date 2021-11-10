@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 
 class TicketAcceptOrRejectController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorize('manage-ticket');
+    }
+
     public function accept(Ticket $ticket)
     {
         $ticket->accept();

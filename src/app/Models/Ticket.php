@@ -15,6 +15,10 @@ class Ticket extends Model
 
     protected $fillable = ['title', 'description', 'ticket_type_id', 'status_id', 'priority_id', 'updated_by_id', 'target_date', 'owner_id', 'department_id', 'accepted'];
     
+    protected $casts = [
+        'target_date' => 'date'
+    ];
+
     public function scopeWithOutRejected(Builder $query): Builder
     {
         return $query->where('accepted', true)

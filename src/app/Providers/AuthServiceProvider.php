@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\Ticket;
+use App\Models\TicketTask;
+use App\Models\User;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -25,6 +28,14 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        Gate::define('manage-ticket', fn(User $user) => $user->isManager() || $user->isAdmin());
+        
+        Gate::define('manage-task', fn(User $user) => $user->isDeveloper() || $user->isManager() || $user->isAdmin());
+
+        Gate::define('complete', fn(User $user, TicketTask $task) => $user->id == $task->owner_id || $user->isAdmin());
+
+        Gate::define('update', function(User $user, Ticket $ticket) {
+            return $user->isAdmin() || $user->isManager() || $user->isDeveloper() || $user->id == $ticket->created_by_id;
+        });
     }
 }

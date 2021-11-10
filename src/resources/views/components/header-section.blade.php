@@ -9,6 +9,7 @@
         </div>
     </div>
     @unless ($readonly)
-        <x-button class="sm:mt-0 sm:w-auto px-10 w-full justify-center mt-4">update</x-button> 
+        {{ $slot }}
+        {{-- <x-button class="sm:mt-0 sm:w-auto px-10 w-full justify-center mt-4">update</x-button>  --}}
     @endunless
 </x-header>

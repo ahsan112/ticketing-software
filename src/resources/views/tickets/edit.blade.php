@@ -18,16 +18,18 @@
                     </x-alert-warning>
                 </div>
                 <div class="col-span-1">
-                    <div class="flex flex-col space-y-2">
-                        <form method="POST" action="{{ route('ticket.reject', $ticket) }}">
-                            @csrf
-                            <x-button class=" w-full bg-red-900 justify-center">reject</x-button>
-                        </form>
-                        <form method="POST" action="{{ route('ticket.accept', $ticket) }}">
-                            @csrf
-                            <x-button class="w-full justify-center">accept</x-button>
-                        </form>
-                    </div>
+                    @can('manage-ticket')
+                        <div class="flex flex-col space-y-2">
+                            <form method="POST" action="{{ route('ticket.reject', $ticket) }}">
+                                @csrf
+                                <x-button class=" w-full bg-red-900 justify-center">reject</x-button>
+                            </form>
+                            <form method="POST" action="{{ route('ticket.accept', $ticket) }}">
+                                @csrf
+                                <x-button class="w-full justify-center">accept</x-button>
+                            </form>
+                        </div>
+                    @endcan
                 </div>
             </div>
         @endif 
@@ -42,6 +44,10 @@
                 <x-slot name="subHeading">
                     {{ 'Created on ' . $ticket->created_at->toFormattedDateString() }}
                 </x-slot>
+
+                @can('update', $ticket)
+                    <x-button class="sm:mt-0 sm:w-auto px-10 w-full justify-center mt-4">update</x-button> 
+                @endcan
             </x-header-section>
 
             <div class="grid sm:grid-cols-3 sm:gap-6 sm:mt-6 mt-12">
@@ -73,71 +79,79 @@
                     </x-panel>
                 </div>
                 <div class="mt-4 sm:mt-0 col-span-1">
-                    <x-ticket-info :ticket="$ticket"/>
+                    @can('manage-ticket')
+                        <x-ticket-info :ticket="$ticket"/>
+                    @else 
+                        <x-ticket-info :readonly="true" :ticket="$ticket"/>
+                    @endcan
                 </div>
             </div>
         </form>
 
-        <div class="grid grid-cols-1 sm:grid-cols-3 sm:gap-6 sm:mt-6 mt-12">
-            <div class="col-span-1 sm:col-span-2">
-                <x-panel>
-                    <h3 class="text-lg font-medium leading-6 text-gray-900">Comments</h3>
-                    <hr class="my-4">
-                    <div class="mb-8 space-y-6">
-                        @foreach ($ticket->comments as $comment)
-                            <x-comment :comment="$comment"/>
-                        @endforeach
-                    </div>
-
-                    <div class="-mb-6 -mx-6 bg-gray-50 text-right">
-                        <div class="px-6 py-6">
-                            <form method="POST" action="{{ route('ticket.comments', $ticket) }}">
-                                @csrf
-                                @error('body')
-                                    <span class="text-xs text-red-500">{{ $message }}</span>
-                                @enderror
-                                <textarea id="comment" name="body" rows="5" class="inline-flex  shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-2 w-full sm:text-sm border border-gray-300 rounded-md" placeholder="Add your comment here" required></textarea>
-                                <x-button class="mt-2">Comment</x-button>
-                            </form>
+        @unless (is_null($ticket->accepted) || $ticket->rejected())            
+            <div class="grid grid-cols-1 sm:grid-cols-3 sm:gap-6 sm:mt-6 mt-12">
+                <div class="col-span-1 sm:col-span-2">
+                    <x-panel>
+                        <h3 class="text-lg font-medium leading-6 text-gray-900">Comments</h3>
+                        <hr class="my-4">
+                        <div class="mb-8 space-y-6">
+                            @foreach ($ticket->comments as $comment)
+                                <x-comment :comment="$comment"/>
+                            @endforeach
                         </div>
-                    </div>
-                </x-panel>
-            </div>
-            <div class="mt-4 sm:mt-0 col-span-1">
-                <x-panel>
-                    <form method="POST" action="{{ route('ticket.documents', $ticket) }}" enctype="multipart/form-data">
-                        @csrf
-                        <x-ticket-document-upload/>
-                    </form>
-                    
-                    <x-ticket-documents :documents="$ticket->documents"/>  
-                </x-panel>
-            </div>
-        </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-3 sm:gap-6 sm:mt-24 mt-12">
-            <div class="col-span-1 sm:col-span-2">
-                <div class="flex justify-between  items-center">
-                    <div class="flex">
-                        <div class="flex flex-col">
-                            <x-heading>Sub Tasks</x-heading>
-                            <p class="ml6 mt-1 text-sm text-gray-400">add some sub tasks </p>
+                        <div class="-mb-6 -mx-6 bg-gray-50 text-right">
+                            <div class="px-6 py-6">
+                                <form method="POST" action="{{ route('ticket.comments', $ticket) }}">
+                                    @csrf
+                                    @error('body')
+                                        <span class="text-xs text-red-500">{{ $message }}</span>
+                                    @enderror
+                                    <textarea id="comment" name="body" rows="5" class="inline-flex  shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-2 w-full sm:text-sm border border-gray-300 rounded-md" placeholder="Add your comment here" required></textarea>
+                                    <x-button class="mt-2">Comment</x-button>
+                                </form>
+                            </div>
                         </div>
-                    </div>
-                    <div>
-                        <a href="{{ route('ticket.tasks.create', $ticket) }}" class="px-10 inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">Add</a>
-                    </div>
+                    </x-panel>
                 </div>
-            </div>
-            <div class="col-span-1 sm:col-span-2">
-                <div class="mt-8 sm:mt-0 sm:p-6">
-                   <x-tasks-table :tasks="$ticket->tasks"/>     
-                </div>
+                <div class="mt-4 sm:mt-0 col-span-1">
+                    <x-panel>
+                        <form method="POST" action="{{ route('ticket.documents', $ticket) }}" enctype="multipart/form-data">
+                            @csrf
+                            <x-ticket-document-upload/>
+                        </form>
                         
+                        <x-ticket-documents :documents="$ticket->documents"/>  
+                    </x-panel>
+                </div>
             </div>
 
-            <div class="col-span-1">
+            <div class="grid grid-cols-1 sm:grid-cols-3 sm:gap-6 sm:mt-24 mt-12">
+                <div class="col-span-1 sm:col-span-2">
+                    <div class="flex justify-between  items-center">
+                        <div class="flex">
+                            <div class="flex flex-col">
+                                <x-heading>Sub Tasks</x-heading>
+                                <p class="ml6 mt-1 text-sm text-gray-400">add some sub tasks </p>
+                            </div>
+                        </div>
+                        <div>
+                            @can('manage-task')
+                                <a href="{{ route('ticket.tasks.create', $ticket) }}" class="px-10 inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">Add</a>
+                            @endcan
+                        </div>
+                    </div>
+                </div>
+                <div class="col-span-1 sm:col-span-2">
+                    <div class="mt-8 sm:mt-0 sm:p-6">
+                        <x-tasks-table :tasks="$ticket->tasks"/>     
+                    </div>                     
+                </div>
+
+                <div class="col-span-1">
+                </div>
             </div>
-        </div>
+        @endunless
+
     </x-container>
 </x-app-layout>

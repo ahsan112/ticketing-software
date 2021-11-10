@@ -11,6 +11,8 @@ class TicketTaskController extends Controller
 {
     public function create(Ticket $ticket)
     {
+        $this->authorize('manage-task');
+
         return view('tickets.tasks.create', [
             'ticket' => $ticket->id,
             'users' => User::all()
@@ -19,6 +21,8 @@ class TicketTaskController extends Controller
 
     public function store(Request $request, Ticket $ticket)
     {
+        $this->authorize('manage-task');
+
         $validated = $request->validate([
             'title' => 'required',
             'description' => 'required',
@@ -38,6 +42,8 @@ class TicketTaskController extends Controller
 
     public function update(Request $request, TicketTask $task)
     {
+        $this->authorize('manage-task');
+        
         $validated = $request->validate([
             'title' => 'required',
             'description' => 'required',
@@ -52,6 +58,8 @@ class TicketTaskController extends Controller
 
     public function complete(TicketTask $task)
     {
+        $this->authorize('complete', $task);
+
         $task->complete();
 
         return redirect()->route('tickets.show', $task->ticket_id);

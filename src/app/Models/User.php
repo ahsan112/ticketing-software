@@ -52,4 +52,19 @@ class User extends Authenticatable
     {
         return $this->hasMany(Ticket::class, 'created_by_id');
     }
+
+    public function isManager(): bool
+    {
+        return $this->role == 'manager';
+    }
+
+    public function isDeveloper(): bool
+    {
+        return $this->role == 'developer';
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->role == 'admin';
+    }
 }

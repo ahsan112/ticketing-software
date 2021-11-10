@@ -6,27 +6,27 @@
         <hr class="my-4">
         <div class="flex justify-between mt-4">
             <p>Type</p>
-            <p class="font-semibold">Feature </p>
+            <p class="font-semibold">{{ $ticket->type?->name ?? 'Not Set' }}</p>
         </div>
         <hr class="my-4">
         <div class="flex justify-between mt-4">
             <p>Status</p>
-            <p class="font-semibold">In progress</p>
+            <p class="font-semibold">{{ $ticket->status?->name ?? 'Not Set' }}</p>
         </div>
         <hr class="my-4">
         <div class="flex justify-between mt-4">
             <p>Priority</p>
-            <p class="font-semibold">High</p>
+            <p class="font-semibold">{{ $ticket->priority?->name ?? 'Not Set' }}</p>
         </div>
         <hr class="my-4">
         <div class="flex justify-between mt-4">
             <p>Developer</p>
-            <p class="font-semibold">James May </p>
+            <p class="font-semibold">{{ $ticket->owner?->name ?? 'Not Set' }}</p>
         </div>
         <hr class="my-4">
         <div class="flex justify-between mt-4">
             <p>Target Data</p>
-            <p class="font-semibold">20 Feb, 2021</p>
+            <p class="font-semibold">{{ $ticket->target_date?->diffForHumans() ?? 'Not Set' }}</p>
         </div>
     </x-panel>
 @else    
