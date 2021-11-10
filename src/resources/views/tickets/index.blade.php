@@ -1,5 +1,14 @@
 <x-app-layout> 
     <x-container>
+
+        @if (session('message'))
+            <div class="flex justify-end mb-16">
+                <x-success>
+                    {{ session('message') }}
+                </x-success>
+            </div>
+       @endif
+
         <x-header class="mb-12 px-6 sm:px-0">
             <div class="sm:flex">
                 <x-heading class="sm:mr-4">Tickets</x-heading>

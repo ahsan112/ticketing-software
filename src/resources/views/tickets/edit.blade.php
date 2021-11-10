@@ -63,7 +63,14 @@
                 </div>    
             @endif
         @endif
-       
+
+        @if (session('message'))
+            <div class="flex justify-end mb-16">
+                <x-success>
+                    {{ session('message') }}
+                </x-success>
+            </div>
+        @endif
 
         <form method="POST" action="{{ route('tickets.update', $ticket) }}">
             @csrf

@@ -52,7 +52,7 @@ class TicketController extends Controller
 
         $request->user()->tickets()->create($validated);
 
-        return redirect()->route('tickets.index');
+        return redirect()->route('tickets.index')->with('message', 'Ticket Created!');
     }
 
     /**
@@ -105,7 +105,7 @@ class TicketController extends Controller
 
         $ticket->update($validated);
 
-        return redirect()->route('tickets.show', $ticket);
+        return redirect()->route('tickets.show', $ticket)->with('message', 'Ticket Updated!');
     }
 
     /**
