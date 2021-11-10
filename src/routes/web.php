@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminManagementController;
 use App\Http\Controllers\TicketAcceptOrRejectController;
 use App\Http\Controllers\TicketApprovalController;
 use App\Http\Controllers\TicketCommentController;
@@ -9,6 +10,7 @@ use App\Http\Controllers\TicketDocumentController;
 use App\Http\Controllers\TicketFilterController;
 use App\Http\Controllers\TicketTaskCommentController;
 use App\Http\Controllers\TicketTaskController;
+use App\Http\Controllers\UserSettingController;
 use App\Http\Controllers\UserTaskController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -26,6 +28,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function () {
     Route::view('/', 'dashboard')->name('dashboard');
+
+    Route::get('users', [AdminManagementController::class, 'index'])->name('users.index');
+    Route::get('users/{user}', [AdminManagementController::class, 'edit'])->name('user.edit');
+    Route::put('users/{user}/role', [AdminManagementController::class, 'updateRole'])->name('users.role');
+
+    Route::get('settings', [UserSettingController::class, 'index'])->name('settings.index');
+    Route::put('settings/{user}', [UserSettingController::class, 'update'])->name('settings.update');
+    Route::put('settings/{user}/password', [UserSettingController::class, 'updatePassword'])->name('settings.password');
 
     Route::get('tasks', UserTaskController::class)->name('tasks.index');
 
