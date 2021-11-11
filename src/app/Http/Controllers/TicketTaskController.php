@@ -19,6 +19,9 @@ class TicketTaskController extends Controller
         ]);
     }
 
+    /**
+     * @see \App\Observers\TicketTaskObserver
+     */
     public function store(Request $request, Ticket $ticket)
     {
         $this->authorize('manage-task');
@@ -40,6 +43,10 @@ class TicketTaskController extends Controller
         return view('tickets.tasks.edit', compact('task'));
     }
 
+
+    /**
+     * @see \App\Observers\TicketTaskObserver
+     */
     public function update(Request $request, TicketTask $task)
     {
         $this->authorize('manage-task');

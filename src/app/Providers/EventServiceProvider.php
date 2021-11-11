@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Ticket;
+use App\Models\TicketTask;
+use App\Observers\TicketObserver;
+use App\Observers\TicketTaskObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -27,6 +31,7 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Ticket::observe(TicketObserver::class);
+        TicketTask::observe(TicketTaskObserver::class);
     }
 }

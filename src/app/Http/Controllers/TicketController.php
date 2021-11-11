@@ -35,7 +35,8 @@ class TicketController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
+     * @see \App\Observers\TicketObserver
+     * 
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
@@ -82,6 +83,8 @@ class TicketController extends Controller
     /**
      * Update the specified resource in storage.
      *
+     * @see \App\Observers\TicketObserver
+     * 
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
