@@ -10,6 +10,7 @@ use App\Http\Controllers\TicketDocumentController;
 use App\Http\Controllers\TicketFilterController;
 use App\Http\Controllers\TicketTaskCommentController;
 use App\Http\Controllers\TicketTaskController;
+use App\Http\Controllers\UserActivityController;
 use App\Http\Controllers\UserSettingController;
 use App\Http\Controllers\UserTaskController;
 use Illuminate\Support\Facades\Auth;
@@ -27,7 +28,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth')->group(function () {
-    Route::view('/', 'dashboard')->name('dashboard');
+    Route::get('/', UserActivityController::class)->name('dashboard');
 
     Route::get('users', [AdminManagementController::class, 'index'])->name('users.index');
     Route::get('users/{user}', [AdminManagementController::class, 'edit'])->name('user.edit');

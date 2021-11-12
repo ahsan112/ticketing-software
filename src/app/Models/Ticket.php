@@ -14,6 +14,8 @@ class Ticket extends Model
 {
     use HasFactory;
 
+    public $old = [];
+    
     protected $fillable = [
         'title', 
         'description', 
@@ -112,6 +114,11 @@ class Ticket extends Model
     public function approvers(): HasMany
     {
         return $this->hasMany(TicketApproval::class);
+    }
+
+    public function activity(): HasMany
+    {
+        return $this->hasMany(Activity::class);
     }
 
     public function createdBy(): BelongsTo

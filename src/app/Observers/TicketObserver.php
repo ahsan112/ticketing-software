@@ -24,6 +24,18 @@ class TicketObserver
         Mail::to($managers)->queue(new NewTicketRaised($ticket));
     }
 
+
+    /**
+     * handle before updated
+     *
+     * @param Ticket $ticket
+     * @return void
+     */
+    public function updating(Ticket $ticket)
+    {
+        $ticket->old = $ticket->getOriginal();
+    }
+
     /**
      * Handle the Ticket "updated" event.
      *
@@ -37,38 +49,19 @@ class TicketObserver
 
             Mail::to($user->email)->queue(new DeveloperAssignedTicket($ticket));
         }
+
+        $ticket->activity()->create([
+            'user_id' => auth()->user()->id,
+            'description' => 'updated',
+            'changes' => $this->activityChanges($ticket)
+        ]);
     }
 
-    /**
-     * Handle the Ticket "deleted" event.
-     *
-     * @param  \App\Models\Ticket  $ticket
-     * @return void
-     */
-    public function deleted(Ticket $ticket)
+    private function activityChanges(Ticket $ticket)
     {
-        //
-    }
-
-    /**
-     * Handle the Ticket "restored" event.
-     *
-     * @param  \App\Models\Ticket  $ticket
-     * @return void
-     */
-    public function restored(Ticket $ticket)
-    {
-        //
-    }
-
-    /**
-     * Handle the Ticket "force deleted" event.
-     *
-     * @param  \App\Models\Ticket  $ticket
-     * @return void
-     */
-    public function forceDeleted(Ticket $ticket)
-    {
-        //
+        return [
+            'before' => Arr::except(array_diff($ticket->old, $ticket->getAttributes()), 'updated_at'),
+            'after' => Arr::except($ticket->getChanges(), 'updated_at')
+        ];
     }
 }

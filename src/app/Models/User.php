@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -75,5 +77,23 @@ class User extends Authenticatable
     public function isAdmin(): bool
     {
         return $this->role == 'admin';
+    }
+    public function activity()
+    {
+        $ticketIds = $this->tickets()->pluck('id');
+        $period = CarbonPeriod::create(Carbon::now()->subDays(2), Carbon::now());
+
+        $activities = Activity::whereBetween('created_at', [$period->getStartDate(), $period->getEndDate()])
+                ->whereIn('ticket_id', $ticketIds)
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+        $userActivity = [];
+        foreach ($period as $date) {
+            $activity = [$date->format('D-d, M') => $activities->whereBetween('created_at', [$date->format('Y-m-d') . ' 00:00:00', $date->format('Y-m-d') .' 23:59:59'])];
+            $userActivity = $activity + $userActivity;
+        }
+
+        return $userActivity;
     }
 }

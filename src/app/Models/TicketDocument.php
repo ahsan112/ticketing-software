@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class TicketDocument extends Model
 {
@@ -14,6 +15,11 @@ class TicketDocument extends Model
     public function ticket()
     {
         return $this->belongsTo(Ticket::class);
+    }
+
+    public function activity(): MorphOne
+    {
+        return $this->morphOne(Activity::class, 'subject');
     }
 
     public function createdBy()
