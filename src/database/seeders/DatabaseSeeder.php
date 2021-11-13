@@ -2,11 +2,16 @@
 
 namespace Database\Seeders;
 
+use App\Models\Activity;
 use App\Models\Department;
 use App\Models\Ticket;
 use App\Models\TicketPriority;
 use App\Models\TicketStatus;
+use App\Models\TicketTask;
 use App\Models\TicketType;
+use App\Models\User;
+use Carbon\Carbon;
+use Database\Factories\ActivityFactory;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -18,10 +23,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        \App\Models\User::factory()->create(['role' => 'admin']);
-        \App\Models\User::factory()->create(['role' => 'manager']);
-        \App\Models\User::factory()->create(['role' => 'developer']);
-        \App\Models\User::factory()->create(['role' => 'employee']);
+        \App\Models\User::factory()->create(['role' => 'admin', 'email' => 'admin@admin.com']);
+        \App\Models\User::factory()->create(['role' => 'manager', 'email' => 'manager@manager.com']);
+        \App\Models\User::factory()->create(['role' => 'developer', 'email' => 'developer@developer.com']);
+        \App\Models\User::factory(4)->create(['role' => 'developer']);
+        \App\Models\User::factory()->create(['role' => 'employee', 'email' => 'john@doe.com']);
+        \App\Models\User::factory(20)->create(['role' => 'employee']);
 
         TicketType::factory()->create(['name' => 'feature']);
         TicketType::factory()->create(['name' => 'bug']);
@@ -47,19 +54,13 @@ class DatabaseSeeder extends Seeder
             ['name' => 'IT'],
             ['name' => 'Sales'],
             ['name' => 'Engineering'],
-            ['name' => 'procurement']
+            ['name' => 'Procurement']
         ]);
 
-        Ticket::factory(3)->create();
-        Ticket::factory(3)->create([
-            'department_id' => 2,
-            'created_by_id' => 2,
-            'updated_by_id' => 2,
-        ]);
-        Ticket::factory(3)->create([
-            'department_id' => 3,
-            'created_by_id' => 3,
-            'updated_by_id' => 3,
-        ]);
+        Ticket::factory()
+            ->count(30)
+            ->has(TicketTask::factory()->count(5), 'tasks')
+            ->has(Activity::factory()->count(3))
+            ->create();
     }
 }

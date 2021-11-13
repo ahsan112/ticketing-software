@@ -30,9 +30,11 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth')->group(function () {
     Route::get('/', UserActivityController::class)->name('dashboard');
 
-    Route::get('users', [AdminManagementController::class, 'index'])->name('users.index');
-    Route::get('users/{user}', [AdminManagementController::class, 'edit'])->name('user.edit');
-    Route::put('users/{user}/role', [AdminManagementController::class, 'updateRole'])->name('users.role');
+    Route::middleware('can:manage-users')->group(function () {
+        Route::get('users', [AdminManagementController::class, 'index'])->name('users.index');
+        Route::get('users/{user}', [AdminManagementController::class, 'edit'])->name('user.edit');
+        Route::put('users/{user}/role', [AdminManagementController::class, 'updateRole'])->name('users.role');
+    });
 
     Route::get('settings', [UserSettingController::class, 'index'])->name('settings.index');
     Route::put('settings/{user}', [UserSettingController::class, 'update'])->name('settings.update');

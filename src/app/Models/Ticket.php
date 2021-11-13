@@ -118,7 +118,7 @@ class Ticket extends Model
 
     public function activity(): HasMany
     {
-        return $this->hasMany(Activity::class);
+        return $this->hasMany(Activity::class)->latest();
     }
 
     public function createdBy(): BelongsTo

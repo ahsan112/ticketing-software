@@ -41,6 +41,8 @@ class AuthServiceProvider extends ServiceProvider
         
         Gate::define('set-role', fn(User $user) => $user->isAdmin());
 
+        Gate::define('manage-users', fn(User $user) => $user->isAdmin());
+
         Gate::define('update', function(User $user, Ticket $ticket) {
             return $user->isAdmin() || $user->isManager() || $user->isDeveloper() || $user->id == $ticket->created_by_id;
         });

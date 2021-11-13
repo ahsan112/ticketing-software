@@ -19,9 +19,9 @@
                 
                 @isset($activity->changes)
                     @if (count($activity->changes['after']) == 1)
-                        updated the {{ key($activity->changes['after']) }} of the ticket
+                        updated the {{ key($activity->changes['after']) }} of the <a class="text-blue-500" href="{{ route('tickets.show', $activity->ticket_id) }}">ticket</a>
                     @else
-                        updated the ticket
+                        updated the  <a href="{{ route('tickets.show', $activity->ticket_id) }}">ticket</a>
                     @endif
                 @endisset
             </p>

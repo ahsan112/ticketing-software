@@ -43,7 +43,7 @@
 
     <x-table.td> 
         <x-slot name="value">
-            {{ $ticket->target_date?->diffForHummans() ?? '20 Feb, 2021' }}
+            {{ $ticket->target_date?->diffForHumans() ?? '20 Feb, 2021' }}
         </x-slot>
     </x-table.td>
 

@@ -58,7 +58,7 @@
             <x-input id="target_date" 
                     type="date"
                     name="target_date"
-                    value="{{ old('target_date', $ticket->target_date) }}"
+                    value="{{ old('target_date', $ticket->target_date->format('Y-m-d')) }}"
                     class="mt-1 w-full"
             />
         </div>
