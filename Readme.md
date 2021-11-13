@@ -40,7 +40,7 @@ should be running on localhost:8000
 
 password = password
 
-admin = admin@admin.com
-manager = manager@manager.com
-developer = developer@developer.com 
-employee = john@doe.com
+- admin = admin@admin.com
+- manager = manager@manager.com
+- developer = developer@developer.com 
+- employee = john@doe.com
